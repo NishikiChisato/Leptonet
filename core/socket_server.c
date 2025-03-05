@@ -12,12 +12,9 @@
 #include <errno.h>
 #include <assert.h>
 
-#include "socket_server.h"
 #include "epoll.h"
-
-#define leptonet_malloc malloc
-#define leptonet_free free
-#define leptonet_error(context, msg, ...)
+#include "socket_server.h"
+#include "leptonet_malloc.h"
 
 // socket server properties
 #define SOCKET_IDMAX (1 << 16)
