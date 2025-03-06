@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "test_framework.h"
+#include "framework.h"
 
 static struct TestInfo *test_list = NULL;
 

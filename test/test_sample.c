@@ -1,4 +1,4 @@
-#include "test_framework.h"
+#include "framework.h"
 
 bool test_sample() {
   TEST_BEGIN;
