@@ -35,6 +35,15 @@ void leptonet_global_message_queue_init() {
   Q = q;
 }
 
+void leptonet_global_message_queue_release() {
+  struct message_queue *mq;
+  struct leptonet_message msg;
+  while(leptonet_globalmq_pop(mq)) {
+    leptonet_mq_release(mq, NULL, NULL);
+  }
+  leptonet_free(Q);
+}
+
 struct message_queue* leptonet_mq_create(uint32_t handle) {
   struct message_queue *q = leptonet_malloc(sizeof *q);
   q->handle = handle;
@@ -50,7 +59,9 @@ void leptonet_mq_release(struct message_queue *mq, message_drop drop, void * ud)
   assert(mq->in_global == UNINGLOBAL);
   struct leptonet_message msg;
   while (leptonet_mq_pop(mq, &msg)) {
-    drop(&msg, ud);
+    if (drop != NULL) {
+      drop(&msg, ud);
+    }
   }
 }
 

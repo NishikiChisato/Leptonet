@@ -14,6 +14,7 @@ struct leptonet_message {
 struct message_queue;
 
 void leptonet_global_message_queue_init();
+void leptonet_global_message_queue_release();
 struct message_queue* leptonet_mq_create(uint32_t handle);
 
 typedef void (*message_drop)(struct leptonet_message *, void *);
