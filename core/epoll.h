@@ -16,41 +16,41 @@ struct event {
   bool eof;       // eof event
 };
 
-inline int epinit() {
+static inline int epinit() {
   return epoll_create(1024);
 }
 
-inline void epclose(int epfd) {
+static inline void epclose(int epfd) {
   close(epfd);
 }
 
-inline int epvalid(int epfd) {
+static inline int epvalid(int epfd) {
   return epfd >= 0;
 }
 
-inline int epregist(int epfd, int fd, void *ptr) {
+static inline int epregist(int epfd, int fd, void *ptr) {
   struct epoll_event e;  
   e.events = EPOLLIN;
   e.data.ptr = ptr;
   return epoll_ctl(epfd, EPOLL_CTL_ADD, fd, &e);
 }
 
-inline int epread(int epfd, int fd, void *ptr, bool read) {
+static inline int epread(int epfd, int fd, void *ptr, bool read) {
   struct epoll_event e;
   e.events = read ? EPOLLIN : 0;
   e.data.ptr = ptr;
   return epoll_ctl(epfd, EPOLL_CTL_MOD, fd, &e);
 }
 
-inline int epwrite(int epfd, int fd, void *ptr, bool write) {
+static inline int epwrite(int epfd, int fd, void *ptr, bool write) {
   struct epoll_event e;
   e.events = write ? EPOLLOUT : 0;
   e.data.ptr = ptr;
   return epoll_ctl(epfd, EPOLL_CTL_MOD, fd, &e);
 }
 
-inline int epwait(int epfd, struct event *evs, int maxevents) {
-  epoll_event events[maxevents];
+static inline int epwait(int epfd, struct event *evs, int maxevents) {
+  struct epoll_event events[maxevents];
   int cnt = epoll_wait(epfd, events, maxevents, 0);
   for (int i = 0; i < cnt; i ++) {
     evs[i].read = (events[i].events & EPOLLIN);
@@ -62,7 +62,7 @@ inline int epwait(int epfd, struct event *evs, int maxevents) {
   return cnt;
 }
 
-inline int epdel(int epfd, int fd) {
+static inline int epdel(int epfd, int fd) {
   return epoll_ctl(epfd, EPOLL_CTL_DEL, fd, NULL) == 0;
 }
 

@@ -8,12 +8,12 @@ struct rwlock {
   ATOMIC_INT write;
 };
 
-inline void rwlock_init(struct rwlock *lock) {
+static inline void rwlock_init(struct rwlock *lock) {
   ATOMIC_INIT(&lock->read, 0);
   ATOMIC_INIT(&lock->write, 0);
 }
 
-inline void rwlock_rlock(struct rwlock *lock) {
+static inline void rwlock_rlock(struct rwlock *lock) {
   for(;;) {
     // wait for write lock to be released
     while(ATOMIC_CAP(&lock->write, 0, 1)) {
@@ -29,7 +29,7 @@ inline void rwlock_rlock(struct rwlock *lock) {
   }
 }
 
-inline void rwlock_wlock(struct rwlock *lock) {
+static inline void rwlock_wlock(struct rwlock *lock) {
   // wait for write lock to be released
   while(ATOMIC_CAP(&lock->write, 0, 1)) {
     while(ATOMIC_LOAD(&lock->write)) {}
@@ -39,11 +39,11 @@ inline void rwlock_wlock(struct rwlock *lock) {
   ATOMIC_INC(&lock->write);
 }
 
-inline void rwlock_runlock(struct rwlock *lock) {
+static inline void rwlock_runlock(struct rwlock *lock) {
   ATOMIC_DEC(&lock->read);
 }
 
-inline void rwlock_wunlock(struct rwlock *lock) {
+static inline void rwlock_wunlock(struct rwlock *lock) {
   ATOMIC_STORE(&lock->write, 0);
 }
 

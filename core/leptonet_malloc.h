@@ -2,6 +2,7 @@
 #define __LEPTONET_MALLOC_H__
 
 #include <stddef.h>
+#include <stdlib.h>
 
 #define leptonet_malloc malloc
 #define leptonet_free free
