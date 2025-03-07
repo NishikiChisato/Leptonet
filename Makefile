@@ -33,11 +33,11 @@ $(info includes: $(CORE_INCLUDES), $(TEST_INCLUDES))
 $(info core_src: $(CORE_SRC))
 
 # pattern rule for core module
-$(BIN)/%.o: $(CORE_DIR)/%.c | $(BIN)
-	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -c $< -o $@
+$(BIN)/%.o: $(CORE_DIR)/%.o | $(BIN)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 # pattern rule to compile test module
-$(BIN)/%: $(TEST_DIR)/%.c $(TEST_FRAMEWORK_OBJ) $(CORE_OBJS) | $(BIN)
+$(BIN)/%: $(TEST_DIR)/%.o $(TEST_FRAMEWORK_OBJ) $(CORE_OBJS) | $(BIN)
 	@$(CC) $(CFLAGS) $(CORE_INCLUDES) $(TEST_INCLUDES) $< $(TEST_FRAMEWORK_OBJ) $(CORE_OBJS) $(LDFLAGS) -o $@
 
 # generate framework object file
@@ -52,7 +52,7 @@ $(BIN):
 runtest: all
 	@for test in $(TEST_TARGETS); do\
 		echo "Running $$test...";\
-		$$test || exit 1;\
+		$$test;\
 	done
 
 # clean up

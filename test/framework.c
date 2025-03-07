@@ -2,22 +2,25 @@
 
 #include "framework.h"
 
-static struct TestInfo *test_list = NULL;
+#define MAX_TESTCASE_NUM 256
+
+static struct TestInfo test_list[MAX_TESTCASE_NUM];
+static int test_cnt = 0;
 
 void testinfo_regist(const char *suite, const char *name, TestFunc func) {
-  struct TestInfo *t = malloc(sizeof *t);
+  struct TestInfo *t = &test_list[test_cnt++];
   t->suite = suite;
   t->name = name;
   t->func = func;
   t->next = test_list;
-  test_list = t;
 }
 
 int main() {
   int passed = 0;
   int failed = 0;
 
-  for (struct TestInfo *t = test_list; t; t = t->next) {
+  for (int i = 0; i < test_cnt; i ++) {
+    struct TestInfo *t = &test_list[i];
     printf(COLOR_YELLO "Running %s.%s\n" COLOR_RESET, t->suite, t->name);
     bool result = t->func();
     if (result) {
