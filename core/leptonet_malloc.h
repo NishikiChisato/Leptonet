@@ -12,4 +12,6 @@ void* leptonet_malloc(size_t);
 void leptonet_free(void*);
 void* leptonet_realloc(void*, size_t);
 
+void* leptonet_strdup(const char* name);
+
 #endif
