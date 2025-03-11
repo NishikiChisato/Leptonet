@@ -6,6 +6,7 @@ bool test_mq_basic() {
 
   leptonet_global_message_queue_init();
   leptonet_global_message_queue_release();
+
   TEST_END;
 }
 
