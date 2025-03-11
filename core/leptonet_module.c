@@ -18,7 +18,8 @@ struct modules {
 
 static struct modules *M = NULL;
 
-static void* leptonet_strdup(const char *str) {
+// TODO: temporary placed here
+void* leptonet_strdup(const char *str) {
   int len = strlen(str);
   char * s = leptonet_malloc(len);
   memcpy(s, str, len);

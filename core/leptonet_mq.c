@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 
 #include "leptonet_mq.h"
 #include "leptonet_malloc.h"
@@ -71,7 +72,11 @@ int leptonet_mq_length(struct message_queue *mq) {
 }
 
 static void extend_mq(struct message_queue *mq) {
-  struct leptonet_message *newmsg = leptonet_realloc(mq->msg, mq->capacity * 2);
+  struct leptonet_message *newmsg = leptonet_malloc(mq->capacity * 2);
+  // we cannot directly use memcpy to move memory content
+  for (int i = 0; i < mq->capacity; i ++) {
+    newmsg[i] = mq->msg[(mq->head + i) % mq->capacity];
+  }
   mq->head = 0;
   mq->tail = mq->capacity;
   mq->capacity *= 2;
@@ -126,7 +131,7 @@ void leptonet_globalmq_push(struct message_queue *mq) {
   spinlock_unlock(&Q->lock);
 }
 
-int leptonet_globalmq_pop(struct message_queue *mq) {
+int leptonet_globalmq_pop(struct message_queue **mq) {
   spinlock_lock(&Q->lock);
   if (Q->head == NULL) {
     assert(Q->tail == NULL);
@@ -134,7 +139,7 @@ int leptonet_globalmq_pop(struct message_queue *mq) {
     return 0;
   } else {
     assert(Q->tail == NULL);
-    mq = Q->head;
+    *mq = Q->head;
     Q->head = Q->head->next;
     if (Q->head == NULL) {
       Q->tail = NULL;
