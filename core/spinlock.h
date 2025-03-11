@@ -13,9 +13,7 @@ static inline void spinlock_init(struct spinlock *lock) {
 
 static inline void spinlock_lock(struct spinlock *lock) {
   // return the old value and set the new value
-  while(!ATOMIC_CAP(&lock->lock, 0, 1)) {
-    // reduce contention
-    while(ATOMIC_LOAD(&lock->lock)) {}
+  while(!ATOMIC_CAS(&lock->lock, 0, 1)) {
   }
 }
 

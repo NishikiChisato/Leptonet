@@ -16,9 +16,7 @@ static inline void rwlock_init(struct rwlock *lock) {
 static inline void rwlock_rlock(struct rwlock *lock) {
   for(;;) {
     // wait for write lock to be released
-    while(ATOMIC_CAP(&lock->write, 0, 1)) {
-      while(ATOMIC_LOAD(&lock->write)) {}
-    }
+    while(ATOMIC_LOAD(&lock->write)) {}
     ATOMIC_INC(&lock->read);
     // check if write lock is released
     if(ATOMIC_LOAD(&lock->write)) {
@@ -31,12 +29,9 @@ static inline void rwlock_rlock(struct rwlock *lock) {
 
 static inline void rwlock_wlock(struct rwlock *lock) {
   // wait for write lock to be released
-  while(ATOMIC_CAP(&lock->write, 0, 1)) {
-    while(ATOMIC_LOAD(&lock->write)) {}
-  }
+  while(!ATOMIC_CAS(&lock->write, 0, 1)) {}
   // wait for read lock to be released
   while(ATOMIC_LOAD(&lock->read)) {}
-  ATOMIC_INC(&lock->write);
 }
 
 static inline void rwlock_runlock(struct rwlock *lock) {

@@ -22,6 +22,6 @@
 #define ATOMIC_OR(ptr, val) __sync_or_and_fetch(ptr, val)
 #define ATOMIC_XOR(ptr, val) __sync_xor_and_fetch(ptr, val)
 
-#define ATOMIC_CAP(ptr, oval, nval) __sync_bool_compare_and_swap(ptr, oval, nval)
+#define ATOMIC_CAS(ptr, oval, nval) __sync_bool_compare_and_swap(ptr, oval, nval)
 
 #endif
