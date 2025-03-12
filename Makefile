@@ -1,6 +1,6 @@
 CC = clang
 CFLAGS = -g -Wall -Wextra -fsanitize=address -fno-omit-frame-pointer
-# CFLAGS = -g -Wall -Wextra
+# CFLAGS = -O2 -Wall -Wextra
 LDFLAGS = -ldl -llua -lm -lpthread
 SHARED = -fPIC -shared
 
@@ -25,12 +25,12 @@ TEST_FRAMEWORK_OBJ = $(addprefix $(BIN)/, $(notdir $(TEST_FRAMEWORK:.c=.o)))
 all: $(TEST_TARGETS)
 
 # debug info
-$(info test_module: $(TEST_MODULES))
-$(info test_obj: $(TEST_OBJS))
-$(info test_target: $(TEST_TARGETS))
-$(info test_framework: $(TEST_FRAMEWORK), test_framework_obj: $(TEST_FRAMEWORK_OBJ))
-$(info includes: $(CORE_INCLUDES), $(TEST_INCLUDES))
-$(info core_src: $(CORE_SRC))
+# $(info test_module: $(TEST_MODULES))
+# $(info test_obj: $(TEST_OBJS))
+# $(info test_target: $(TEST_TARGETS))
+# $(info test_framework: $(TEST_FRAMEWORK), test_framework_obj: $(TEST_FRAMEWORK_OBJ))
+# $(info includes: $(CORE_INCLUDES), $(TEST_INCLUDES))
+# $(info core_src: $(CORE_SRC))
 
 # pattern rule for core module
 $(BIN)/%.o: $(CORE_DIR)/%.o | $(BIN)
@@ -52,7 +52,9 @@ $(BIN):
 runtest: all
 	@for test in $(TEST_TARGETS); do\
 		echo "Running $$test...";\
-		$$test;\
+		echo "Sleep 3 seconds for address sanitizer...";\
+		sleep 3;\
+		$$test || exit 1;\
 	done
 
 # clean up

@@ -8,4 +8,4 @@ bool test_sample() {
   TEST_END;
 }
 
-TEST_REGIST("sample_suite", "sample_name", test_sample);
+TEST_REGIST(sample_suite, sample_name, test_sample);

@@ -12,7 +12,6 @@ void testinfo_regist(const char *suite, const char *name, TestFunc func) {
   t->suite = suite;
   t->name = name;
   t->func = func;
-  t->next = test_list;
 }
 
 int main() {
@@ -22,17 +21,21 @@ int main() {
   for (int i = 0; i < test_cnt; i ++) {
     struct TestInfo *t = &test_list[i];
     printf(COLOR_YELLO "Running %s.%s\n" COLOR_RESET, t->suite, t->name);
+    fflush(stdout);
     bool result = t->func();
     if (result) {
       printf(COLOR_GREEN "PASSED\n" COLOR_RESET);
+      fflush(stdout);
       passed++;
     } else {
       printf(COLOR_RED "FAILED\n" COLOR_RESET);
+      fflush(stdout);
       failed++;
     }
   }
   printf("==================\n");
   printf(COLOR_GREEN "Tests Passed: %d\n" COLOR_RESET, passed);
   printf(COLOR_RED "Tests Failed: %d\n" COLOR_RESET, failed);
+  fflush(stdout);
   return failed > 0 ? 1 : 0;
 }

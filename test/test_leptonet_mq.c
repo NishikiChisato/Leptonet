@@ -10,4 +10,4 @@ bool test_mq_basic() {
   TEST_END;
 }
 
-TEST_REGIST("mqtest", "basic", test_mq_basic);
+TEST_REGIST(mqtest, basic, test_mq_basic);
