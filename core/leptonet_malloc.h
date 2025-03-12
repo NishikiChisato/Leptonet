@@ -4,13 +4,11 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#define leptonet_malloc malloc
-#define leptonet_free free
-#define leptonet_realloc realloc
+#define leptonet_malloc cusmalloc
+#define leptonet_free cusfree
 
 void* leptonet_malloc(size_t);
 void leptonet_free(void*);
-void* leptonet_realloc(void*, size_t);
 
 void* leptonet_strdup(const char* name);
 
